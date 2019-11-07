@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xpf.coffee.dao.UserMapper">
+
+    <sql id="user">
+        uid, username, password, grade, address, phone
+    </sql>
+
+    <!-- 添加用户 -->
+    <insert id="insertUser" parameterType="user">
+        insert into user(user_name,user_pwd,user_phone,user_email,user_level)
+        values(#{userName}, #{userPwd}, #{userPhone}, #{userEmail}, #{userLevel})
+    </insert>
+
+    <select id="findUser" parameterType="user" resultType="user">
+        select *
+        from user
+        where user_name = #{userName} and user_pwd = #{userPwd} and user_level = #{userLevel}
+    </select>
+
+
+</mapper>

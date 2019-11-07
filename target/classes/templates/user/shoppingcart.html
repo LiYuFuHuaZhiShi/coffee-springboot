@@ -1,0 +1,233 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>☆☆卡布奇诺咖啡馆☆☆</title>
+<link th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap.css}" rel="stylesheet">
+<link th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css}">
+<script  th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
+<script  th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+<script th:src="@{/js/item.js}"></script>
+
+<style>
+#item img {
+	width: 30px;
+}
+</style>
+</head>
+<body>
+	<!-- 网页头部 -->
+	<div th:include="/htmlfragments/header::common"></div>
+
+	<!-- 网页正文 -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-warning" style="margin-top: 70px;">
+					<!-- 头部 -->
+					<div class="panel-heading" style="height: 55px">
+						<div class="pull-left">
+							<span style="line-height: 35px;font-size: medium; ">购物车</span>
+						</div>
+						<div class="pull-right">
+							<button class="btn btn-success" onclick="window.location.href='/product/shopcart'">
+								<span class="glyphicon glyphicon-refresh"></span>&nbsp;刷&nbsp;新
+							</button>
+						</div>
+					</div>
+					<!-- 主列表 -->
+					<div class="panel-body" id="item">
+						<table class="table table-striped" style="text-align: center">
+							<tr>
+								<td>餐点</td>
+								<td>餐点名</td>
+								<td>类型</td>
+								<td>单价</td>
+								<td>保存</td>
+								<td>删除</td>
+							</tr>
+							<!--<c:forEach var="item" items="${requestScope.items}">-->
+								<tr th:each="p:${session.products}">
+									<form action="#" method="post">
+										<td>
+											<img th:src="@{'/static/images/index/product'+${p.getpId()}+'.png'}"></td>
+										<td th:text="${p.getName()}"></td>
+										<td th:text="${p.getType()}"></td>
+										<td th:text="${p.getPrice()}"></td>
+										<td>
+											<input type="hidden" name="modify" value="1" />
+											<input type="hidden" name="userId" value="${user.userId}" />
+											<input type="hidden" name="itemId" value="${item.itemId}" />
+											<button class="btn btn-info" type="submit">
+												<span class="glyphicon glyphicon-ok"></span>
+											</button>
+										</td>
+									</form>
+									<td>
+										<form method="post">
+											<input type="hidden" name="delete" value="1" />
+											<input type="hidden" name="itemId" value="${item.itemId}" />
+											<input type="hidden" name="name" value="${item.name}" />
+											<button class="btn btn-info" type="submit">
+												<span class="glyphicon glyphicon-remove"></span>
+											</button>
+										</form>
+									</td>
+								</tr>
+							<!--</c:forEach>-->
+						</table>
+					</div>
+					<div class="panel-footer " style="height: 50px">
+						<div class="pull-right">
+							<span style="font-size: medium; "></span>
+							<button class="btn btn-danger" data-toggle="modal" data-target="#pay">
+								<span class="glyphicon glyphicon-usd"></span>&nbsp;结&nbsp;算
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 确定删除弹框 -->
+	<div id="delete" class="modal fade" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- 右上角的叉 -->
+				<div class="modal-body">
+					<button class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-title">
+					<h1 class="text-center">移除餐点</h1>
+				</div>
+
+				<!-- 主体 -->
+				<div class="modal-body">
+					<div style="text-align: center;">
+						<h3>是否要从购物车中移除该餐点?</h3>
+					</div>
+					<form action="#" method="post">
+						<div class="form-group has-feedback">
+							<label for="itemId">餐点ID</label>
+							<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-user"></span>
+								</span>
+								<input id="itemId" name="itemId" class="form-control" readonly="readonly" type="text" value="${param.itemId}">
+							</div>
+						</div>
+						<div class="form-group has-feedback">
+							<label for="name">名称</label>
+							<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-leaf"></span>
+								</span>
+								<input id="name" name="name" class="form-control" readonly="readonly" type="text" value="${param.name}">
+							</div>
+						</div>
+						<div>
+							<input type="hidden" name="userId" value="${user.userId}" />
+							<div style="text-align: center;">
+								<button class="btn btn-primary" type="submit">确&nbsp;&nbsp;定</button>
+								<button class="btn btn-danger" data-dismiss="modal">取&nbsp;&nbsp;消</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 根据修改param转入修改界面,有卡顿？？？ -->
+	<!--<c:if test="${not empty param.delete}">-->
+		<!--<script>-->
+			<!--$('#delete').modal("show");-->
+		<!--</script>-->
+	<!--</c:if>-->
+
+	<!-- 确认订单弹框 -->
+	<div id="pay" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-title">
+					<h1 class="text-center">确认订单</h1>
+				</div>
+
+				<!-- 主体 -->
+				<div class="modal-body">
+						<span style="font-size: medium; "><strong>是否要完成结账操作</strong></span> <br />
+						<button class="btn btn-primary" onclick="window.location.href='#'" type="submit" data-dismiss="modal">确&nbsp;&nbsp;定</button>
+						<button class="btn btn-danger" data-dismiss="modal">取&nbsp;&nbsp;消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 操作成功弹框 -->
+	<div id="operate-success" class="modal fade" aria-hidden="true"
+		data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-title">
+					<h1 class="text-center">操作成功</h1>
+				</div>
+
+				<!-- 主体 -->
+				<div class="modal-body">
+					<div style="text-align: center;">
+						<span style="font-size: medium; "><strong>${operateSuccess}</strong></span> <br />
+						<button class="btn btn-primary" onclick="window.location.href='#'" type="submit" data-dismiss="modal">确&nbsp;&nbsp;定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 操作成功后提示 -->
+	<!--<c:if test="${not empty operateSuccess}">-->
+		<!--<script>-->
+			<!--$('#operate-success').modal("show");-->
+		<!--</script>-->
+	<!--</c:if>-->
+
+	<!-- 操作失败弹框 -->
+	<div id="operate-error" class="modal fade" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<button class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-title">
+					<h1 class="text-center">操作失败</h1>
+				</div>
+
+				<!-- 主体 -->
+				<div class="modal-body">
+					<div style="text-align: center;">
+						<span style="font-size: medium; "><strong>${operateError}</strong></span><br />
+						<button class="btn btn-primary" onclick="window.location.href='#'" type="submit" data-dismiss="modal">确&nbsp;&nbsp;定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 操作失败后提示 -->
+	<!--<c:if test="${not empty operateError}">-->
+		<!--<script>-->
+			<!--$('#operate-error').modal("show");-->
+		<!--</script>-->
+	<!--</c:if>-->
+
+
+
+</body>
+</html>

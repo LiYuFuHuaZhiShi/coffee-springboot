@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>register</title>
+<link th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap.css}" rel="stylesheet">
+<link th:href="@{/lib/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css}">
+<script  th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
+<script  th:src="@{/lib/bootstrap-3.3.7-dist/js/bootstrap.js}"></script>
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/CAPTCHA.css}">
+<script th:src="@{/js/verify-register-user.js}"></script>
+<script th:src="@{/js/idcode.js}"></script>
+
+	<!-- 用户注册 -->
+</head>
+<body>
+
+<div th:fragment="common">
+<div id="register" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-body">
+				<button class="close" data-dismiss="modal">
+					<span>&times;</span>
+				</button>
+			</div>
+
+			<div class="modal-title">
+				<h1 class="text-center">注册</h1>
+			</div>
+
+			<!-- 注册表单 -->
+			<div class="modal-body">
+				<form th:action="@{/user/register}" onSubmit="return checkRegister()" method="post">
+
+					<div class="form-group has-feedback" id="register-account-div">
+						<label for="register-account">用户名</label>
+						<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-user"></span>
+								</span>
+							<input id="register-account" name="userName" class="form-control" placeholder="请输入用户名" maxlength="20" type="text">
+						</div>
+
+						<span style="color: red; display: none;" class="tips"></span>
+						<span style="display: none;" class=" glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+
+					<div class="form-group has-feedback" id="register-password-div">
+						<label for="register-password">密码</label>
+						<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-lock"></span>
+								</span>
+							<input id="register-password" name="userPwd" class="form-control" placeholder="请输入密码，明文存储，请勿输入常用密码" maxlength="20" type="password">
+						</div>
+
+						<span style="color: red; display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+
+					<div class="form-group has-feedback" id="register-passwordConfirm-div">
+						<label for="register-passwordConfirm">确认密码</label>
+						<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-lock"></span>
+								</span>
+							<input id="register-passwordConfirm" name="passwordConfirm" class="form-control" placeholder="请再次输入密码" maxlength="20" type="password">
+						</div>
+						<span style="color: red; display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+
+
+					<div class="form-group has-feedback" id="register-tel-div">
+						<label for="register-tel">手机号码</label>
+						<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-phone"></span>
+								</span>
+							<input id="register-tel" name="userPhone" class="form-control" placeholder="请输入手机号码" maxlength="11" type="text" value="">
+						</div>
+						<span style="color: red; display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+
+					<div class="form-group has-feedback" id="register-email-div">
+						<label for="register-email">邮箱</label>
+						<div class="input-group">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-envelope"></span>
+								</span>
+							<input id="register-email" name="userEmail" class="form-control" type="email" placeholder="例如:123@123.com" value="">
+						</div>
+						<span style="color: red; display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+
+					<div class="form-group has-feedback" id="register-level-div">
+						用户级别
+						<div class="input-group" data-toggle="buttons">
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-user"></span>
+							</span>
+							<label class="btn btn-default active">
+								<input name="userLevel" type="radio" value="1" checked>用户(默认)</label>
+							<label class="btn btn-default">
+								<input name="userLevel" type="radio" value="0">管理员
+							</label>
+						</div>
+
+						<span style="color: red; display: none;" class="tips"></span>
+						<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+						<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-7">
+							<div class="form-group has-feedback" id="idcode-btn-div">
+								<label for="idcode-btn">验证码</label>
+								<div class="input-group">
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-qrcode"></span>
+										</span>
+									<input id="idcode-btn" class="form-control" placeholder="请输入验证码" maxlength="4" type="text">
+								</div>
+								<span style="color: red; display: none;" class="tips"></span>
+								<span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+								<span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+							</div>
+						</div>
+						<!-- 验证码背景 -->
+						<div class="col-xs-5" style="padding-top: 30px">
+							<div id="idcode" style="background: transparent;"></div>
+						</div>
+					</div>
+
+					<div class="text-right">
+						<!--<span class="text-danger">${requestScope.registerError}</span>-->
+						<button class="btn btn-primary" type="submit">提&nbsp;&nbsp;交</button>
+						<button class="btn btn btn-warning orm-control" type="reset">重&nbsp;&nbsp;置</button>
+						<button class="btn btn-danger" data-dismiss="modal">取&nbsp;&nbsp;消</button>
+					</div>
+					<input type="hidden" name="orgUrl" value="${pageContext.request.requestURL}" />
+					<a href="" data-toggle="modal" data-dismiss="modal" data-target="#login">已有账号？点我登录</a>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- 注册成功弹框 -->
+	<div id="register-success" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-title">
+					<h1 class="text-center">注册成功</h1>
+				</div>
+
+				<!-- 主体 -->
+				<div class="modal-body">
+						<div class="">
+							<button class="btn btn-primary" type="submit" onclick="window.location.href='${pageContext.request.contextPath}${forwardUrl}'" data-dismiss="modal">确&nbsp;&nbsp;定</button>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 注册成功后提示 -->
+	<div th:if="${session.user != null}">
+		<script>
+			$('#register-success').modal("show");
+		</script>
+	</div>
+	<!-- 注册失败之后返回，重新打开模态框 -->
+	<div th:if="${session.user == null}">
+		<script>
+            $('#register').modal("show");
+		</script>
+	</div>
+
+</div>
+</body>
+</html>

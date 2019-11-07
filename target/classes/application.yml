@@ -1,0 +1,55 @@
+
+debug: true
+spring:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/coffee?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 初始化大小，最小，最大
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    # 配置监控统计拦截的filters,去掉监控界面sql无法统计，‘wall’用于防火墙
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    userGlobalDataSourceStat: true
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+#    schema:
+#      - classpath:jingdong.sql
+
+mybatis:
+  config-location: classpath:mybatis/sqlMapConfig.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+
+freemarker:
+  cache: false    #页面不加载缓存，修改即时生效
+
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: utf-8
+
+#thymeleaf启用不严格检查html
+thymeleaf:
+  mode: LEGACYHTML5
+
