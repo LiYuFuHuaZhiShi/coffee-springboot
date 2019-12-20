@@ -18,5 +18,10 @@
         where user_name = #{userName} and user_pwd = #{userPwd} and user_level = #{userLevel}
     </select>
 
-
+	<select id="findUserList" parameterType="String" resultType="user">
+        select *
+        from user
+        where user_name like #{likeName}
+    </select>
+	
 </mapper>

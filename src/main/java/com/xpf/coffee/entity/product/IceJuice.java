@@ -11,8 +11,7 @@ public class IceJuice implements Product {
 
     @Override
     public void sell() {
-            System.out.println("香草风味星冰乐");
-    }
+            System.out.println("香草风味星冰乐");}
 
     public Integer getpId() {
         return pId;

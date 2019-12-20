@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.Filter;
+
 @Configuration
 public class DruidConfig {
 
@@ -38,7 +40,7 @@ public class DruidConfig {
     //2、配置监控的filter
     @Bean
     public FilterRegistrationBean webstatFilter(){
-        FilterRegistrationBean bean = new FilterRegistrationBean();
+        FilterRegistrationBean<Filter> bean = new FilterRegistrationBean();
         bean.setFilter(new WebStatFilter());
 
         Map<String,String> initParams =new HashMap<>();

@@ -1,5 +1,7 @@
 package com.xpf.coffee.service;
 
+import java.util.List;
+
 import com.xpf.coffee.entity.User;
 
 public interface UserService {
@@ -19,4 +21,6 @@ public interface UserService {
      * @throws Exception
      */
     User loginUser(User user)throws Exception;
+    
+    List<User> findUserList(String likeName) throws Exception;
 }

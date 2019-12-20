@@ -1,5 +1,7 @@
 package com.xpf.coffee.dao;
 
+import java.util.List;
+
 import com.xpf.coffee.entity.User;
 
 public interface UserMapper {
@@ -15,4 +17,6 @@ public interface UserMapper {
      * @param user 用户对象
      */
     User findUser(User user);
+    
+    List<User> findUserList(String likeName);
 }

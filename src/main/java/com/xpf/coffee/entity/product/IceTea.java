@@ -11,8 +11,7 @@ public class IceTea implements Product {
 
     @Override
     public void sell() {
-        System.out.println("冰摇红莓黑加仑茶®");
-    }
+        System.out.println("冰摇红莓黑加仑茶®");}
 
     public Integer getpId() {
         return pId;

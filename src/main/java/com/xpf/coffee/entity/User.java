@@ -14,9 +14,24 @@ public class User implements Serializable {
     private String userEmail;
     private Integer userLevel;
 
+    public User(){}
+
+    public User(String userName, String userPwd, Integer userLevel) {
+        this.userName = userName;
+        this.userPwd = userPwd;
+        this.userLevel = userLevel;
+    }
+
+    public User(String userName, String userPwd, String userPhone, String userEmail, Integer userLevel) {
+        this.userName = userName;
+        this.userPwd = userPwd;
+        this.userPhone = userPhone;
+        this.userEmail = userEmail;
+        this.userLevel = userLevel;
+    }
 
 
-//    /**
+    //    /**
 //     * 静态内部类--单例模式（懒加载）
 //     */
 //    private static class SingletonUserInstance{
@@ -80,4 +95,15 @@ public class User implements Serializable {
         this.userLevel = userLevel;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", userPwd='" + userPwd + '\'' +
+                ", userPhone='" + userPhone + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userLevel=" + userLevel +
+                '}';
+    }
 }

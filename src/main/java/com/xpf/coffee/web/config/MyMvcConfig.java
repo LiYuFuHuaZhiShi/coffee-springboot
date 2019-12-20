@@ -14,8 +14,7 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    }
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");}
 
     @Bean //将组件注册在容器内
     //所有的WebMvcConfigurerAdapter组件都会一起起作用

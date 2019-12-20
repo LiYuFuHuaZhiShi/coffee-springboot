@@ -11,8 +11,7 @@ public class Biscuits implements Product {
 
     @Override
     public void sell() {
-        System.out.println("法式马卡龙");
-    }
+        System.out.println("法式马卡龙");}
 
     public Integer getpId() {
         return pId;
